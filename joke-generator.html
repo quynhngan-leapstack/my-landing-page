@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Joke Generator</title>
+    <link rel="stylesheet" href="joke-styles.css">
+</head>
+<body>
+    <div class="joke-container">
+        <div class="joke-card">
+            <div class="joke-header">
+                <h1>😂 Joke Generator</h1>
+                <p>Get a random laugh every time!</p>
+            </div>
+
+            <div class="joke-display">
+                <div class="joke-type-badge" id="jokeType">General</div>
+                <div class="joke-content" id="jokeContent">
+                    <p>Click the button to get a joke...</p>
+                </div>
+            </div>
+
+            <div class="joke-controls">
+                <button class="btn-generate" id="generateBtn" onclick="getJoke()">
+                    <span>Get a Joke</span>
+                    <span class="spinner" id="spinner"></span>
+                </button>
+            </div>
+
+            <div class="joke-categories">
+                <h3>Filter by Category:</h3>
+                <div class="category-buttons">
+                    <button class="category-btn active" onclick="setCategory('any')">Any</button>
+                    <button class="category-btn" onclick="setCategory('general')">General</button>
+                    <button class="category-btn" onclick="setCategory('programming')">Programming</button>
+                    <button class="category-btn" onclick="setCategory('knock-knock')">Knock-Knock</button>
+                </div>
+            </div>
+
+            <div class="joke-history">
+                <h3>Recent Jokes:</h3>
+                <ul id="jokeHistory" class="history-list"></ul>
+                <button class="btn-clear" onclick="clearHistory()">Clear History</button>
+            </div>
+
+            <div class="joke-footer">
+                <p>API: <a href="https://official-joke-api.appspot.com/" target="_blank">Official Joke API</a></p>
+                <p>Made with ❤️ for laughs</p>
+            </div>
+        </div>
+
+        <div class="joke-stats">
+            <div class="stat-item">
+                <span class="stat-label">Jokes Generated:</span>
+                <span class="stat-value" id="jokeCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Favorite Jokes:</span>
+                <span class="stat-value" id="favoriteCount">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="joke-script.js"></script>
+</body>
+</html>
