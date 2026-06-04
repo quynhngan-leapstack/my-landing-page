@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Joke Generator - Works!</title>
+    <title>Random Joke Generator</title>
     <style>
         * {
             margin: 0;
@@ -244,8 +244,6 @@
                     url = `https://official-joke-api.appspot.com/jokes/${currentCategory}/random`;
                 }
 
-                console.log('Fetching from:', url);
-
                 const response = await fetch(url);
                 
                 if (!response.ok) {
@@ -253,7 +251,6 @@
                 }
 
                 const joke = await response.json();
-                console.log('Got joke:', joke);
 
                 let jokeText = '';
                 if (joke.setup && joke.delivery) {
@@ -269,7 +266,6 @@
                 updateStats();
 
             } catch (error) {
-                console.error('Error:', error);
                 jokeBox.innerHTML = `<div style="color: #ff6b6b;">❌ Error: ${error.message}</div>`;
             } finally {
                 loading.style.display = 'none';
