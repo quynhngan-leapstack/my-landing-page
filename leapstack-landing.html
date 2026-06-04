@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leapstack — Đánh giá & Thiết kế Gói Phúc lợi Sức khỏe Doanh nghiệp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=Fraunces:ital,wght@0,300;0,600;0,900;1,300;1,600&display=swap" rel="stylesheet">
+<style>
+  /* ── LEAPSTACK BRAND COLORS (from leapstack.vn) ── */
+  :root {
+    --ls-green:       #00C48C;   /* primary CTA green */
+    --ls-green-dark:  #009E72;   /* hover */
+    --ls-green-light: #00E5A8;   /* highlight */
+    --ls-green-muted: rgba(0,196,140,0.10);
+    --ls-navy:        #111827;   /* dark bg / hero */
+    --ls-navy-mid:    #1F2D40;   /* card bg dark */
+    --ls-white:       #FFFFFF;
+    --ls-off-white:   #F5F7FA;
+    --ls-gray-light:  #E4E9F0;
+    --ls-gray-mid:    #8896A8;
+    --ls-text-dark:   #111827;
+    --ls-text-body:   #374151;
+    --ls-amber:       #F59E0B;
+    --ls-red:         #EF4444;
+    --shadow-green:   0 8px 40px rgba(0,196,140,0.22);
+    --shadow-card:    0 4px 24px rgba(17,24,39,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background: var(--ls-white);
+    color: var(--ls-text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 48px;
+    background: rgba(17,24,39,0.96);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 22px; font-weight: 900; color: var(--ls-white);
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--ls-green); }
+  .nav-badge {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(0,196,140,0.12);
+    border: 1px solid rgba(0,196,140,0.30);
+    color: var(--ls-green-light);
+    font-size: 12px; font-weight: 600;
+    padding: 6px 14px; border-radius: 20px;
+  }
+  .nav-badge::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ls-green);
+    animation: blink 2s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: var(--ls-navy);
+    display: flex; align-items: center;
+    padding: 120px 48px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 65% 55% at 85% 45%, rgba(0,196,140,0.12) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 35% at 5% 85%, rgba(0,196,140,0.07) 0%, transparent 60%);
+  }
+  .hero-dots {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.035;
+    background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .hero-inner {
+    max-width: 1160px; margin: 0 auto; width: 100%;
+    display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 72px; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,196,140,0.10);
+    border: 1px solid rgba(0,196,140,0.28);
+    color: var(--ls-green-light);
+    font-size: 11px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase;
+    padding: 7px 14px; border-radius: 4px; margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(34px, 4.2vw, 54px);
+    font-weight: 900; line-height: 1.1; color: var(--ls-white);
+    margin-bottom: 22px; letter-spacing: -1px;
+  }
+  .hero h1 em { font-style: italic; color: var(--ls-green); }
+  .hero-sub {
+    font-size: 16px; line-height: 1.75; color: rgba(255,255,255,0.60);
+    margin-bottom: 38px;
+  }
+  .hero-sub strong { color: var(--ls-green-light); }
+  .hero-cta { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--ls-green); color: var(--ls-navy);
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 15px; font-weight: 800;
+    padding: 15px 30px; border-radius: 8px;
+    border: none; cursor: pointer; text-decoration: none; display: inline-block;
+    transition: all 0.25s; box-shadow: var(--shadow-green);
+  }
+  .btn-primary:hover {
+    background: var(--ls-green-light);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,196,140,0.35);
+  }
+  .btn-ghost {
+    color: rgba(255,255,255,0.55); font-size: 14px; font-weight: 500;
+    text-decoration: none; display: flex; align-items: center; gap: 6px;
+    transition: color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--ls-green-light); }
+  .hero-slots {
+    display: flex; align-items: center; gap: 10px; margin-top: 22px;
+  }
+  .slot-pips { display: flex; gap: 4px; }
+  .slot-pips span {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--ls-green); opacity: 0.25;
+  }
+  .slot-pips span.on { opacity: 1; }
+  .slot-text { font-size: 12.5px; color: rgba(255,255,255,0.45); }
+  .slot-text strong { color: var(--ls-amber); }
+
+  /* hero stats card */
+  .hero-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px; padding: 36px;
+  }
+  .hero-card-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--ls-green); margin-bottom: 26px;
+  }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 28px; }
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 34px; font-weight: 900; color: var(--ls-white); line-height: 1;
+  }
+  .stat-num span { color: var(--ls-green); }
+  .stat-lbl { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 6px; line-height: 1.4; }
+  .partners-mini-label {
+    font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.28); margin-bottom: 12px; font-weight: 600;
+  }
+  .partners-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .pchip {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.55);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.4px;
+    padding: 4px 10px; border-radius: 4px;
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 96px 48px; }
+  .container { max-width: 1160px; margin: 0 auto; }
+  .section-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--ls-green); margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(26px, 3.2vw, 40px);
+    font-weight: 900; color: var(--ls-text-dark);
+    line-height: 1.15; margin-bottom: 14px; letter-spacing: -0.4px;
+  }
+  .section-sub {
+    font-size: 15.5px; color: var(--ls-text-body); line-height: 1.75; max-width: 560px;
+  }
+
+  /* ── PARTNERS STRIP ── */
+  .partners-strip {
+    background: var(--ls-white);
+    padding: 48px 48px 52px;
+    border-bottom: 1px solid var(--ls-gray-light);
+  }
+  .partners-strip-label {
+    text-align: center;
+    font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--ls-gray-mid); margin-bottom: 32px;
+  }
+  .partners-row {
+    display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+    gap: 14px; margin-bottom: 28px;
+  }
+  .partner-tile {
+    width: 112px; height: 76px;
+    background: var(--ls-white);
+    border: 1.5px solid var(--ls-gray-light);
+    border-radius: 12px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 5px;
+    padding: 10px 8px;
+    box-shadow: 0 2px 10px rgba(17,24,39,0.05);
+    transition: all 0.25s;
+    cursor: default;
+  }
+  .partner-tile:hover {
+    border-color: var(--ls-green);
+    box-shadow: 0 6px 22px rgba(0,196,140,0.14);
+    transform: translateY(-3px);
+  }
+  .ptile-abbr {
+    font-family: 'Fraunces', serif;
+    font-size: 17px; font-weight: 900; color: var(--ls-navy);
+    line-height: 1; letter-spacing: -0.3px;
+  }
+  .ptile-name {
+    font-size: 9.5px; font-weight: 600; color: var(--ls-gray-mid);
+    text-align: center; line-height: 1.3;
+  }
+  .partners-tagline {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 28px;
+    padding-top: 22px; border-top: 1px solid var(--ls-gray-light);
+  }
+  .partners-tagline span {
+    font-size: 13px; color: var(--ls-text-body); font-weight: 500;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .partners-tagline span::before {
+    content: '✦'; color: var(--ls-green); font-size: 10px;
+  }
+
+  /* ── PROBLEMS ── */
+  .problems { background: var(--ls-off-white); }
+  .problems-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 52px;
+  }
+  .problem-card {
+    background: var(--ls-white);
+    border: 1.5px solid var(--ls-gray-light);
+    border-radius: 16px; padding: 30px;
+    position: relative; overflow: hidden;
+    transition: all 0.28s;
+  }
+  .problem-card::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--ls-red), #FC8181);
+    transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+  }
+  .problem-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
+  .problem-card:hover::after { transform: scaleX(1); }
+  .problem-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: rgba(239,68,68,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; margin-bottom: 18px;
+  }
+  .problem-title { font-size: 15px; font-weight: 700; color: var(--ls-text-dark); margin-bottom: 10px; line-height: 1.4; }
+  .problem-desc { font-size: 13.5px; color: var(--ls-text-body); line-height: 1.7; }
+
+  /* ── SOLUTIONS ── */
+  .solutions { background: var(--ls-navy); }
+  .solutions .section-title { color: var(--ls-white); }
+  .solutions .section-sub { color: rgba(255,255,255,0.50); }
+  .solutions-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 52px;
+  }
+  .solution-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 30px;
+    transition: all 0.28s; position: relative; overflow: hidden;
+  }
+  .solution-card::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--ls-green), var(--ls-green-light));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+  }
+  .solution-card:hover {
+    background: rgba(0,196,140,0.07);
+    border-color: rgba(0,196,140,0.25);
+    transform: translateY(-4px);
+  }
+  .solution-card:hover::after { transform: scaleX(1); }
+  .solution-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: rgba(0,196,140,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; margin-bottom: 18px;
+  }
+  .solution-title { font-size: 15px; font-weight: 700; color: var(--ls-white); margin-bottom: 10px; line-height: 1.4; }
+  .solution-desc { font-size: 13.5px; color: rgba(255,255,255,0.50); line-height: 1.7; }
+
+  /* ── STEPS ── */
+  .steps { background: var(--ls-white); }
+  .steps-row {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 0;
+    margin-top: 60px; position: relative;
+  }
+  .steps-row::before {
+    content: '';
+    position: absolute; top: 34px;
+    left: calc(16.66% + 34px); right: calc(16.66% + 34px);
+    height: 2px;
+    background: linear-gradient(90deg, var(--ls-green), var(--ls-green-light), var(--ls-green));
+  }
+  .step-item { text-align: center; padding: 0 28px; position: relative; z-index: 1; }
+  .step-num {
+    width: 68px; height: 68px; border-radius: 50%;
+    background: var(--ls-navy);
+    border: 2.5px solid var(--ls-green);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    font-family: 'Fraunces', serif; font-size: 26px; font-weight: 900; color: var(--ls-green);
+    box-shadow: var(--shadow-green);
+  }
+  .step-title { font-size: 16px; font-weight: 700; color: var(--ls-text-dark); margin-bottom: 10px; }
+  .step-desc { font-size: 13.5px; color: var(--ls-text-body); line-height: 1.7; }
+
+  /* urgency */
+  .urgency-bar {
+    background: var(--ls-navy);
+    border: 1px solid rgba(0,196,140,0.20);
+    border-radius: 14px; padding: 26px 36px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    margin-top: 60px; flex-wrap: wrap;
+  }
+  .urgency-bar .left { display: flex; align-items: center; gap: 18px; }
+  .urgency-bar .emo { font-size: 30px; }
+  .urgency-bar h3 { font-size: 17px; font-weight: 800; color: var(--ls-white); margin-bottom: 3px; }
+  .urgency-bar p { font-size: 13px; color: rgba(255,255,255,0.50); }
+  .urgency-bar span { color: var(--ls-amber); font-weight: 700; }
+
+  /* ── FORM ── */
+  .form-section { background: var(--ls-off-white); position: relative; overflow: hidden; }
+  .form-section::before {
+    content: '';
+    position: absolute; top: -160px; right: -160px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,196,140,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .form-wrapper {
+    display: grid; grid-template-columns: 1fr 1.15fr; gap: 72px; align-items: start;
+  }
+  .form-benefits { margin-top: 36px; display: flex; flex-direction: column; gap: 14px; }
+  .benefit-item {
+    display: flex; align-items: flex-start; gap: 13px;
+    background: var(--ls-white); border-radius: 10px;
+    border: 1px solid var(--ls-gray-light); padding: 16px 18px;
+  }
+  .benefit-check {
+    width: 22px; height: 22px; border-radius: 50%; background: var(--ls-green);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: var(--ls-navy); font-weight: 900;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .benefit-text { font-size: 13.5px; color: var(--ls-text-body); line-height: 1.6; }
+  .benefit-text strong { color: var(--ls-text-dark); }
+
+  /* form card */
+  .form-card {
+    background: var(--ls-white);
+    border-radius: 20px;
+    box-shadow: 0 8px 56px rgba(17,24,39,0.11);
+    overflow: hidden;
+  }
+  .form-card-head {
+    background: var(--ls-navy); padding: 26px 34px;
+    position: relative; overflow: hidden;
+  }
+  .form-card-head::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--ls-green), transparent);
+  }
+  .form-slot-badge {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(245,158,11,0.13); border: 1px solid rgba(245,158,11,0.28);
+    color: var(--ls-amber); font-size: 12px; font-weight: 700;
+    padding: 5px 12px; border-radius: 20px; margin-bottom: 10px;
+  }
+  .form-card-head h3 {
+    font-family: 'Fraunces', serif; font-size: 21px; font-weight: 900;
+    color: var(--ls-white); line-height: 1.3;
+  }
+  .form-card-head p { font-size: 12.5px; color: rgba(255,255,255,0.45); margin-top: 5px; }
+  .form-body { padding: 32px 34px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block; font-size: 12.5px; font-weight: 600; color: var(--ls-text-dark); margin-bottom: 6px;
+  }
+  .form-group label span { color: var(--ls-red); }
+  .form-group input,
+  .form-group select {
+    width: 100%; background: var(--ls-off-white);
+    border: 1.5px solid var(--ls-gray-light);
+    border-radius: 8px; padding: 11px 14px;
+    font-family: 'Be Vietnam Pro', sans-serif; font-size: 13.5px; color: var(--ls-text-dark);
+    transition: all 0.2s; outline: none; appearance: none;
+  }
+  .form-group input::placeholder { color: var(--ls-gray-mid); }
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--ls-green); background: var(--ls-white);
+    box-shadow: 0 0 0 3px rgba(0,196,140,0.11);
+  }
+  .form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238896A8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 13px center;
+    padding-right: 34px; cursor: pointer;
+  }
+  .form-submit {
+    width: 100%; background: var(--ls-green); color: var(--ls-navy);
+    font-family: 'Be Vietnam Pro', sans-serif; font-size: 15px; font-weight: 800;
+    padding: 15px; border-radius: 8px; border: none; cursor: pointer;
+    transition: all 0.25s; margin-top: 6px; box-shadow: var(--shadow-green);
+  }
+  .form-submit:hover {
+    background: var(--ls-green-light);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,196,140,0.32);
+  }
+  .form-trust {
+    display: flex; align-items: center; justify-content: center; gap: 18px;
+    margin-top: 16px; flex-wrap: wrap;
+  }
+  .trust-item { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--ls-gray-mid); }
+  .trust-item::before { content: '✓'; color: var(--ls-green); font-weight: 700; }
+
+  /* success */
+  .success-overlay { display: none; text-align: center; padding: 48px 20px; }
+  .success-icon {
+    width: 68px; height: 68px; border-radius: 50%;
+    background: rgba(0,196,140,0.10); border: 2px solid var(--ls-green);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; margin: 0 auto 18px;
+  }
+  .success-overlay h3 {
+    font-family: 'Fraunces', serif; font-size: 22px; font-weight: 900;
+    color: var(--ls-text-dark); margin-bottom: 10px;
+  }
+  .success-overlay p { font-size: 14px; color: var(--ls-text-body); line-height: 1.7; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ls-navy); padding: 44px 48px;
+    text-align: center; border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-logo {
+    font-family: 'Fraunces', serif; font-size: 20px; font-weight: 900;
+    color: var(--ls-white); margin-bottom: 12px;
+  }
+  .footer-logo span { color: var(--ls-green); }
+  .footer-info { font-size: 13px; color: rgba(255,255,255,0.38); line-height: 1.9; }
+  .footer-info a { color: var(--ls-green); text-decoration: none; }
+
+  /* ── ANIMATION ── */
+  .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 14px 20px; }
+    section, .partners-strip { padding: 64px 20px; }
+    .hero { padding: 96px 20px 60px; }
+    .hero-inner, .problems-grid, .solutions-grid, .form-wrapper { grid-template-columns: 1fr; gap: 36px; }
+    .hero-card { display: none; }
+    .steps-row { grid-template-columns: 1fr; }
+    .steps-row::before { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+    .urgency-bar { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Leap<span>stack</span></div>
+  <div class="nav-badge">Còn 6 suất · Tháng 6/2026</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-inner">
+    <div class="fade-up">
+      <div class="hero-badge">Chương trình miễn phí · Chỉ 15 suất / tháng</div>
+      <h1>Đánh giá & Thiết kế Gói <em>Phúc lợi Sức khỏe</em> cho Doanh nghiệp</h1>
+      <p class="hero-sub">Leapstack phân tích toàn bộ chương trình bảo hiểm sức khỏe nhân viên — đề xuất phương án phù hợp từ <strong>9+ hãng bảo hiểm đối tác</strong> lớn trên thị trường Việt Nam.</p>
+      <div class="hero-cta">
+        <a href="#form" class="btn-primary">Đăng ký ngay miễn phí →</a>
+        <a href="#problems" class="btn-ghost">Tìm hiểu thêm ↓</a>
+      </div>
+      <div class="hero-slots">
+        <div class="slot-pips">
+          <span class="on"></span><span class="on"></span><span class="on"></span>
+          <span class="on"></span><span class="on"></span><span class="on"></span>
+          <span></span><span></span><span></span>
+        </div>
+        <span class="slot-text">Tháng 6/2026 · Còn <strong>6 suất</strong> · Xét duyệt theo thứ tự đăng ký</span>
+      </div>
+    </div>
+    <div class="hero-card fade-up" style="transition-delay:.2s">
+      <div class="hero-card-label">Kết quả đã đạt được</div>
+      <div class="stat-grid">
+        <div><div class="stat-num">100<span>K+</span></div><div class="stat-lbl">Người được bảo hiểm</div></div>
+        <div><div class="stat-num">95<span>%+</span></div><div class="stat-lbl">Hồ sơ xử lý đúng SLA</div></div>
+        <div><div class="stat-num">500<span>+</span></div><div class="stat-lbl">Cơ sở y tế liên kết</div></div>
+        <div><div class="stat-num">100<span>%</span></div><div class="stat-lbl">Miễn phí, không ràng buộc</div></div>
+      </div>
+      <div class="partners-mini-label">Đối tác hãng bảo hiểm</div>
+      <div class="partners-chips">
+        <span class="pchip">BẢO VIỆT</span><span class="pchip">PVI</span>
+        <span class="pchip">PTI</span><span class="pchip">MIC</span>
+        <span class="pchip">PJICO</span><span class="pchip">AAA</span>
+        <span class="pchip">DBV</span><span class="pchip">TECHCOMINS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS STRIP -->
+<div class="partners-strip">
+  <div class="container">
+    <div class="partners-strip-label fade-up">Đối tác bảo hiểm của chúng tôi</div>
+    <div class="partners-row fade-up" style="transition-delay:.05s">
+      <div class="partner-tile"><div class="ptile-abbr">BV</div><div class="ptile-name">Bảo Việt</div></div>
+      <div class="partner-tile"><div class="ptile-abbr">PVI</div><div class="ptile-name">PVI Insurance</div></div>
+      <div class="partner-tile"><div class="ptile-abbr">PTI</div><div class="ptile-name">PTI Insurance</div></div>
+      <div class="partner-tile"><div class="ptile-abbr">MIC</div><div class="ptile-name">MIC Insurance</div></div>
+      <div class="partner-tile"><div class="ptile-abbr">PJICO</div><div class="ptile-name">PJICO</div></div>
+      <div class="partner-tile"><div class="ptile-abbr">AAA</div><div class="ptile-name">AAA Insurance</div></div>
+      <div class="partner-tile"><div class="ptile-abbr">DBV</div><div class="ptile-name">DB Việt Nam</div></div>
+      <div class="partner-tile"><div class="ptile-abbr" style="font-size:12px">TCI</div><div class="ptile-name">Techcom<br>Insurance</div></div>
+    </div>
+    <div class="partners-tagline fade-up" style="transition-delay:.1s">
+      <span>Độc lập — không ràng buộc hãng nào</span>
+      <span>Đàm phán song song từ 9+ hãng</span>
+      <span>Luôn chọn phương án tốt nhất cho doanh nghiệp</span>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEMS -->
+<section class="problems" id="problems">
+  <div class="container">
+    <div class="section-eyebrow fade-up">Vấn đề phổ biến</div>
+    <h2 class="section-title fade-up">Doanh nghiệp của bạn<br>đang mắc phải?</h2>
+    <p class="section-sub fade-up">Leapstack được thiết kế để giải quyết chính xác 4 vấn đề vận hành phúc lợi sức khỏe phổ biến nhất ở SME.</p>
+    <div class="problems-grid">
+      <div class="problem-card fade-up">
+        <div class="problem-icon">⚠️</div>
+        <div class="problem-title">Gói bảo hiểm áp đồng loạt — không phân nhóm nhân sự</div>
+        <div class="problem-desc">Toàn bộ nhân viên dùng chung một gói bất kể độ tuổi, vị trí. Ngân sách bị phân bổ sai, quyền lợi không sát nhu cầu thực tế của từng nhóm.</div>
+      </div>
+      <div class="problem-card fade-up" style="transition-delay:.1s">
+        <div class="problem-icon">⚠️</div>
+        <div class="problem-title">HR đang quá tải trong công tác vận hành</div>
+        <div class="problem-desc">Tự triển khai quyền lợi bảo hiểm, hướng dẫn nhân viên bổ sung hồ sơ bồi thường — tất cả tiêu tốn nhân lực HR không cần thiết.</div>
+      </div>
+      <div class="problem-card fade-up" style="transition-delay:.15s">
+        <div class="problem-icon">⚠️</div>
+        <div class="problem-title">Nhân viên không biết dùng quyền lợi, bồi thường kéo dài</div>
+        <div class="problem-desc">Quy trình bảo lãnh viện phí và hoàn phí không rõ ràng khiến nhân viên bức xúc — ảnh hưởng trực tiếp đến mức độ hài lòng và giá trị thực của gói phúc lợi.</div>
+      </div>
+      <div class="problem-card fade-up" style="transition-delay:.2s">
+        <div class="problem-icon">⚠️</div>
+        <div class="problem-title">Thiếu dữ liệu để tối ưu chương trình mỗi kỳ tái tục</div>
+        <div class="problem-desc">Đến kỳ gia hạn, doanh nghiệp mặc định gia hạn hoặc bị ép tăng giá do tỉ lệ bồi thường cao — không có cơ sở để điều chỉnh quyền lợi hay so sánh hãng phù hợp hơn.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTIONS -->
+<section class="solutions">
+  <div class="container">
+    <div class="section-eyebrow fade-up">Giải pháp Leapstack</div>
+    <h2 class="section-title fade-up">Leapstack sẽ làm gì<br>cho bạn?</h2>
+    <p class="section-sub fade-up">Kết quả cụ thể sau khi phân tích quyền lợi dựa trên lịch sử bồi thường — miễn phí, không ràng buộc ký hợp đồng.</p>
+    <div class="solutions-grid">
+      <div class="solution-card fade-up">
+        <div class="solution-icon">✅</div>
+        <div class="solution-title">Thiết kế gói đúng cấu trúc từng nhóm nhân sự</div>
+        <div class="solution-desc">Đề xuất chương trình phân nhóm theo vị trí, độ tuổi và ngân sách — thay vì áp một gói chung cho toàn doanh nghiệp.</div>
+      </div>
+      <div class="solution-card fade-up" style="transition-delay:.1s">
+        <div class="solution-icon">✅</div>
+        <div class="solution-title">Một đầu mối điều phối — HR không cần xử lý rời rạc</div>
+        <div class="solution-desc">Leapstack thay thế HR làm việc với đa hãng bảo hiểm, cơ sở y tế và nhân viên — một đơn vị đồng hành xuyên suốt.</div>
+      </div>
+      <div class="solution-card fade-up" style="transition-delay:.15s">
+        <div class="solution-icon">✅</div>
+        <div class="solution-title">Hỗ trợ bồi thường — trải nghiệm thực tế của bảo hiểm sức khỏe</div>
+        <div class="solution-desc">Đội hỗ trợ bồi thường chuyên biệt với kiến thức y khoa đồng hành từ triển khai đến xử lý hồ sơ trong <strong style="color:var(--ls-green-light)">5 ngày làm việc</strong>.</div>
+      </div>
+      <div class="solution-card fade-up" style="transition-delay:.2s">
+        <div class="solution-icon">✅</div>
+        <div class="solution-title">Đồng hành sau bán — tối ưu chi phí mỗi kỳ tái tục</div>
+        <div class="solution-desc">Phân tích lịch sử bồi thường, đồng thời đàm phán giá tốt nhất nhưng vẫn đảm bảo quyền lợi cao nhất cho nhân viên của bạn.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="steps">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-eyebrow fade-up">Quy trình đơn giản</div>
+      <h2 class="section-title fade-up" style="text-align:center">3 bước nhận kết quả</h2>
+    </div>
+    <div class="steps-row">
+      <div class="step-item fade-up">
+        <div class="step-num">01</div>
+        <div class="step-title">Đăng ký & Xét duyệt</div>
+        <div class="step-desc">Điền form, Leapstack liên hệ xác nhận trong <strong>4h làm việc</strong>. Ưu tiên doanh nghiệp 50–300 nhân viên.</div>
+      </div>
+      <div class="step-item fade-up" style="transition-delay:.15s">
+        <div class="step-num">02</div>
+        <div class="step-title">Buổi đánh giá & Thiết kế 30'</div>
+        <div class="step-desc">Online hoặc offline — chuyên viên phân tích bồi thường hiện tại và chương trình phúc lợi của doanh nghiệp bạn.</div>
+      </div>
+      <div class="step-item fade-up" style="transition-delay:.3s">
+        <div class="step-num">03</div>
+        <div class="step-title">Nhận báo cáo so sánh</div>
+        <div class="step-desc">File PDF chi tiết, không kèm điều kiện mua hàng. <strong>Doanh nghiệp toàn quyền quyết định.</strong></div>
+      </div>
+    </div>
+    <div class="urgency-bar fade-up">
+      <div class="left">
+        <div class="emo">🔔</div>
+        <div>
+          <h3>Tháng 6/2026 — Chỉ còn <span>6 suất</span> cuối</h3>
+          <p>Xét duyệt theo thứ tự đăng ký · Ưu tiên HR Manager, CFO, CEO</p>
+        </div>
+      </div>
+      <a href="#form" class="btn-primary">Đăng ký ngay →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section" id="form">
+  <div class="container">
+    <div class="form-wrapper">
+      <div class="fade-up">
+        <div class="section-eyebrow">Đăng ký miễn phí</div>
+        <h2 class="section-title">Nhận phân tích &<br>so sánh gói phúc lợi<br><em style="font-style:italic;color:var(--ls-green)">miễn phí</em></h2>
+        <p class="section-sub">Ưu tiên HR Manager · CFO · CEO — doanh nghiệp 50–300 nhân viên</p>
+        <div class="form-benefits">
+          <div class="benefit-item"><div class="benefit-check">✓</div><div class="benefit-text"><strong>Miễn phí hoàn toàn</strong> — không phát sinh bất kỳ chi phí nào</div></div>
+          <div class="benefit-item"><div class="benefit-check">✓</div><div class="benefit-text"><strong>Không ràng buộc hợp đồng</strong> — doanh nghiệp toàn quyền quyết định</div></div>
+          <div class="benefit-item"><div class="benefit-check">✓</div><div class="benefit-text"><strong>Thông tin được bảo mật</strong> — chỉ dùng nội bộ để phân tích</div></div>
+          <div class="benefit-item"><div class="benefit-check">✓</div><div class="benefit-text"><strong>Báo cáo PDF chi tiết</strong> — so sánh từ 9+ hãng bảo hiểm</div></div>
+        </div>
+      </div>
+
+      <div class="form-card fade-up" style="transition-delay:.2s">
+        <div class="form-card-head">
+          <div class="form-slot-badge">🔥 Còn 6 suất tháng 6/2026</div>
+          <h3>Điền thông tin để Leapstack<br>liên hệ xác nhận trong 4h</h3>
+          <p>Chỉ mất 2 phút · Nhận báo cáo trong 48h làm việc</p>
+        </div>
+        <div class="form-body" id="formBody">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Họ và tên <span>*</span></label>
+              <input type="text" placeholder="Nguyễn Văn A">
+            </div>
+            <div class="form-group">
+              <label>Chức vụ <span>*</span></label>
+              <select>
+                <option value="" disabled selected>Chọn chức vụ</option>
+                <option>HR Manager</option><option>CHRO</option>
+                <option>CFO</option><option>CEO</option><option>Khác</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Tên công ty <span>*</span></label>
+            <input type="text" placeholder="Công ty ABC">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Số nhân viên <span>*</span></label>
+              <select>
+                <option value="" disabled selected>Chọn quy mô</option>
+                <option>50–100 nhân viên</option><option>100–200 nhân viên</option>
+                <option>200–300 nhân viên</option><option>Trên 300 nhân viên</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Số điện thoại <span>*</span></label>
+              <input type="tel" placeholder="0912 345 678">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email công ty <span>*</span></label>
+            <input type="email" placeholder="hr@company.com">
+          </div>
+          <div class="form-group">
+            <label>Bảo hiểm đang sử dụng</label>
+            <select>
+              <option value="" disabled selected>Chọn hãng hiện tại</option>
+              <option>Bảo Việt</option><option>PVI</option><option>PTI</option>
+              <option>MIC</option><option>PJICO</option><option>AAA</option>
+              <option>DBV</option><option>Techcominsurance</option>
+              <option>Hãng khác</option><option>Chưa có bảo hiểm</option>
+            </select>
+          </div>
+          <button class="form-submit" onclick="submitForm()">Đăng ký nhận tư vấn miễn phí →</button>
+          <div class="form-trust">
+            <div class="trust-item">Miễn phí hoàn toàn</div>
+            <div class="trust-item">Không ràng buộc</div>
+            <div class="trust-item">Bảo mật thông tin</div>
+          </div>
+        </div>
+        <div class="success-overlay" id="successOverlay">
+          <div class="success-icon">✅</div>
+          <h3>Đăng ký thành công!</h3>
+          <p>Leapstack sẽ liên hệ xác nhận với bạn<br>trong vòng <strong>4 giờ làm việc</strong>.<br><br>Cảm ơn bạn đã tin tưởng Leapstack!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Leap<span>stack</span></div>
+  <div class="footer-info">
+    Đại lý đa hãng bảo hiểm sức khỏe doanh nghiệp<br>
+    Tầng trệt, 90/88B Nguyễn Đình Chiểu, P. Tân Định, TP.HCM &nbsp;·&nbsp;
+    <a href="tel:19005771233">1900 57 1233</a> &nbsp;·&nbsp;
+    <a href="mailto:info@leapstack.vn">info@leapstack.vn</a><br><br>
+    © 2026 Leapstack. Tất cả quyền được bảo lưu.
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.fade-up').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
+    });
+  });
+
+  function submitForm() {
+    const inputs = document.querySelectorAll('#formBody input[type="text"], #formBody input[type="tel"], #formBody input[type="email"]');
+    let valid = true;
+    inputs.forEach(i => {
+      if (!i.value.trim()) { i.style.borderColor = 'var(--ls-red)'; valid = false; }
+      else { i.style.borderColor = ''; }
+    });
+    if (!valid) return;
+    document.getElementById('formBody').style.display = 'none';
+    document.getElementById('successOverlay').style.display = 'block';
+  }
+</script>
+</body>
+</html>
